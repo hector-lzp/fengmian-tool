@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>封面台</title>
+  <link rel="stylesheet" href="css/cover-font.css">
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+  <div class="vignette" aria-hidden="true"></div>
+
+  <main class="app">
+    <section class="stage" id="stage">
+      <div class="preview-shell">
+        <div class="preview-frame">
+          <canvas id="plate" width="1080" height="1440"></canvas>
+        </div>
+        <p class="hint" id="hint">拖拽剧照 · Ctrl+V 粘贴</p>
+      </div>
+    </section>
+
+    <aside class="desk">
+      <header class="desk-head">
+        <div class="brand">
+          <h1>封面台</h1>
+          <span class="badge">开源可商用</span>
+        </div>
+        <div class="head-actions">
+          <button type="button" id="pick">剧照</button>
+          <input id="file" type="file" accept="image/*" hidden>
+          <button type="button" class="export" id="export">导出 1080×1440</button>
+        </div>
+      </header>
+
+      <div class="deck">
+        <section class="deck-block">
+          <h2>画幅</h2>
+          <div class="sizes" id="sizes" role="radiogroup" aria-label="尺寸"></div>
+        </section>
+
+        <section class="deck-block">
+          <h2>边框</h2>
+          <div class="borders" id="borders" role="radiogroup" aria-label="边框"></div>
+        </section>
+
+        <section class="deck-block deck-type">
+          <label class="field col-left">
+            <span>剧名</span>
+            <input id="title" maxlength="12" value="谷雨" autocomplete="off" spellcheck="false">
+          </label>
+          <div class="field episode col-right">
+            <span>集数</span>
+            <div class="stepper">
+              <button type="button" id="prev" aria-label="上一集">−</button>
+              <input id="episode" inputmode="numeric" value="17" maxlength="4" autocomplete="off">
+              <button type="button" id="next" aria-label="下一集">+</button>
+            </div>
+          </div>
+          <div class="font-picks col-left" id="titleFonts"></div>
+          <div class="font-picks col-right" id="episodeFonts"></div>
+          <div class="tune col-left">
+            <input id="titleColor" type="color" value="#ffd34d" aria-label="剧名颜色">
+            <div class="swatches" id="titleSwatches"></div>
+            <span class="scale" id="titleScaleLabel">100%</span>
+          </div>
+          <div class="tune col-right">
+            <input id="episodeColor" type="color" value="#f6f3ec" aria-label="集数颜色">
+            <div class="swatches" id="episodeSwatches"></div>
+            <span class="scale" id="episodeScaleLabel">100%</span>
+          </div>
+          <input id="titleScale" class="size col-left" type="range" min="0.65" max="1.7" step="0.05" value="1" aria-label="剧名字号">
+          <input id="episodeScale" class="size col-right" type="range" min="0.65" max="1.7" step="0.05" value="1" aria-label="集数字号">
+        </section>
+      </div>
+
+      <p class="status" id="status"></p>
+    </aside>
+  </main>
+  <script src="js/app.js?v=13"></script>
+</body>
+</html>
