@@ -238,6 +238,9 @@ body::before {
   background: #000;
 }
 
+#plate.can-drag { cursor: grab; }
+#plate.dragging { cursor: grabbing; }
+
 .hint {
   margin: 0;
   flex: none;
@@ -264,9 +267,10 @@ body::before {
 
 .desk-head {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 10px;
+  gap: 8px 10px;
   flex: none;
   margin-bottom: 12px;
   padding-bottom: 12px;
@@ -276,7 +280,9 @@ body::before {
 .brand {
   display: flex;
   align-items: baseline;
-  gap: 8px;
+  flex-wrap: wrap;
+  gap: 6px 8px;
+  flex: 1 1 100%;
   min-width: 0;
 }
 
@@ -308,8 +314,28 @@ h1 {
 
 .head-actions {
   display: flex;
+  flex-wrap: wrap;
   gap: 6px;
-  flex: none;
+  flex: 1 1 100%;
+  justify-content: flex-end;
+  min-width: 0;
+}
+
+#resetText {
+  padding: 7px 10px;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  color: var(--muted);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: border-color 0.12s, color 0.12s;
+}
+
+#resetText:hover {
+  border-color: var(--line-strong);
+  color: var(--ink);
 }
 
 #pick {
@@ -422,16 +448,22 @@ h1 {
 
 .borders {
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 4px;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 3px;
+  max-height: 118px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding-right: 2px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(198, 161, 90, 0.35) transparent;
 }
 
 .borders button {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2px;
-  padding: 4px 2px 3px;
+  gap: 1px;
+  padding: 3px 1px 2px;
   background: var(--surface-2);
   border: 1px solid var(--line);
   border-radius: var(--radius-sm);
@@ -449,9 +481,10 @@ h1 {
 }
 
 .border-name {
-  font-size: 10px;
+  font-size: 9px;
   color: var(--muted);
-  letter-spacing: 0.04em;
+  letter-spacing: 0.02em;
+  line-height: 1.1;
 }
 
 .borders button[aria-checked="true"] .border-name {
@@ -459,8 +492,8 @@ h1 {
 }
 
 .mini {
-  width: 22px;
-  height: 28px;
+  width: 20px;
+  height: 24px;
   flex: none;
   position: relative;
   border-radius: 3px;
@@ -472,32 +505,46 @@ h1 {
   background: linear-gradient(180deg, #2a3140 0%, #2a3140 45%, rgba(0, 0, 0, 0.85) 100%);
 }
 
-.mini.bar {
-  background: linear-gradient(180deg, #2a3140 0%, #2a3140 62%, #070706 100%);
+.mini.cinema {
+  background: radial-gradient(ellipse 75% 70% at 50% 45%, #2a3140 30%, #000 100%);
+  box-shadow: inset 0 -4px 0 0 rgba(198, 161, 90, 0.35);
+}
+
+.mini.bar,
+.mini.frost {
+  background: linear-gradient(180deg, #2a3140 0%, #2a3140 55%, rgba(255, 255, 255, 0.08) 70%, #0a0a0a 100%);
+}
+
+.mini.folio {
+  background: #10100f;
+  box-shadow: inset 0 0 0 4px #f4f2ec, inset 0 0 0 5px #10100f;
+  border-radius: 4px;
 }
 
 .mini.round {
-  background: #f2efe8;
-  box-shadow: inset 0 0 0 3px #f2efe8, inset 0 0 0 5px #2a3140;
+  background: #141312;
+  box-shadow: inset 0 0 0 3px #e8e5de;
   border-radius: 5px;
 }
 
-.mini.line {
+.mini.hair {
   background: #1a1e28;
-  box-shadow: inset 0 0 0 1px #c6a15a;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35);
+}
+
+.mini.aura {
+  background: #1a1e28;
+  box-shadow: inset 0 0 0 1px #c6a15a, 0 0 6px rgba(198, 161, 90, 0.35);
+}
+
+.mini.vignette {
+  background: radial-gradient(ellipse 70% 65% at 50% 42%, #2a3140 35%, #000 100%);
 }
 
 .mini.reel {
   background:
     repeating-linear-gradient(180deg, #000 0 2px, #0c0c0c 2px 5px) left / 4px 100% no-repeat,
     repeating-linear-gradient(180deg, #000 0 2px, #0c0c0c 2px 5px) right / 4px 100% no-repeat,
-    #2a3140;
-}
-
-.mini.scope {
-  background:
-    linear-gradient(#050505, #050505) top / 100% 14% no-repeat,
-    linear-gradient(#050505, #050505) bottom / 100% 14% no-repeat,
     #2a3140;
 }
 
@@ -520,17 +567,86 @@ h1 {
     #1a1e28;
 }
 
-.mini.mount {
+.mini.letterbox {
   background:
-    linear-gradient(#2a3140, #2a3140) center / calc(100% - 6px) calc(100% - 6px) no-repeat,
-    #12110f;
+    linear-gradient(#000, #000) top / 100% 16% no-repeat,
+    linear-gradient(#000, #000) bottom / 100% 16% no-repeat,
+    #2a3140;
 }
 
-.mini.white {
-  background:
-    linear-gradient(#2a3140, #2a3140) center / calc(100% - 6px) calc(100% - 6px) no-repeat,
-    #f4f1ea;
+.mini.matte {
+  background: #2a3140;
+  box-shadow:
+    inset 0 0 0 4px #161412,
+    inset 0 0 0 5px #0a0908;
 }
+
+.mini.flare {
+  background:
+    radial-gradient(ellipse 75% 55% at 88% 12%, rgba(255, 140, 72, 0.5), transparent 52%),
+    radial-gradient(ellipse 50% 40% at 8% 92%, rgba(72, 130, 198, 0.25), transparent 50%),
+    #2a3140;
+}
+
+.mini.twin {
+  background: #1a1e28;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.28),
+    inset 0 0 0 3px transparent,
+    inset 0 0 0 4px rgba(198, 161, 90, 0.38);
+}
+
+.mini.ink {
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, 0.82) 0%, rgba(0, 0, 0, 0.15) 38%, transparent 52%),
+    #2a3140;
+}
+
+.mini.none {
+  background: linear-gradient(135deg, #2a3140 48%, #1a1e28 52%);
+}
+
+.mini.polaroid {
+  background: #f0eeea;
+  box-shadow: inset 3px 3px 0 0 #2a3140, inset -3px -7px 0 0 #f0eeea;
+}
+
+.mini.bold {
+  background: #f4f2ec;
+  box-shadow: inset 0 0 0 4px #111, inset 0 0 0 6px #f4f2ec;
+}
+
+.mini.band {
+  background: linear-gradient(180deg, #2a3140 0%, #2a3140 58%, #c6a15a 58%, #0a0a0a 62%, #0a0a0a 100%);
+}
+
+.mini.chalk {
+  background: #b83232;
+  box-shadow: inset 0 0 0 3px #1a1a1a, inset 0 0 0 5px #b83232;
+}
+
+.mini.chrome {
+  background:
+    linear-gradient(180deg, #c6a15a 0%, #c6a15a 22%, #2a3140 22%, #2a3140 78%, #c6a15a 78%) center / 100% 100% no-repeat;
+  box-shadow: inset 0 0 0 2px #a88648;
+}
+
+.mini.neon {
+  background: #1a1e28;
+  box-shadow:
+    inset 0 0 0 2px #ff4fd8,
+    inset 0 0 0 3px transparent,
+    inset 0 0 0 4px #4ff0ff,
+    0 0 8px rgba(255, 79, 216, 0.45);
+}
+
+.mini.streak {
+  background:
+    linear-gradient(90deg, #c6a15a 0%, #c6a15a 22%, transparent 22%),
+    linear-gradient(#2a3140, #2a3140) padding-box;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.45);
+}
+
 
 /* —— 表单 —— */
 
